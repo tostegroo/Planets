@@ -17,7 +17,7 @@ namespace Planets.Core{
 		public void Create()
 		{
 			astroType = AstroType.Planet;
-			minRadius = 0.1f;
+			minRadius = 0.2f;
 			maxRadius = 20.0f;
 
 			this.SetScale();
