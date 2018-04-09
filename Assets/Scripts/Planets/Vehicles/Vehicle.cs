@@ -20,6 +20,8 @@ namespace Planets.Vehicles{
         public Camera vehicleCamera = null;
         public float turnSpeedCam;// Speed of camera turning when mouse moves in along an axis
 
+        private bool isThisVehicleActive;
+
         private Vector3 mouseOrigin;// Position of cursor when mouse dragging starts
         private bool isRotatingCam;
         private float zoomTarget = 0.0f;
@@ -74,27 +76,44 @@ namespace Planets.Vehicles{
             
             //Camera
             vehicleCamera.name = _vehicleName + "Camera";
-            Debug.Log(vehicleCamera.name);
-
             vehicleCamObject.transform.parent = gameObject.transform;
 
             switch (_vehicleType)
             {
                 case VehicleType.Telescope:
+                    //ChangeCamera("TelescopeView");
                     vehicleCamera.enabled = true;
+                    isThisVehicleActive = true;
                     break;
                 case VehicleType.Probe:
                     vehicleCamera.enabled = false;
+                    isThisVehicleActive = true;
                     break;
             }
         }
 
         void Update()
         {
+            //Changing between cameras
+            if (Input.anyKeyDown)
+            {
+                switch (Input.inputString)
+                {
+                    case "t":
+                        ChangeCamera("Telescope0Camera");
+                        break;
+                    case "1":
+                        ChangeCamera("Probe0Camera");
+                        break;
+                }
+            }
+
             //Controlling (WASD) Vehicle
             Vector3 moveX_AD_sides = Input.GetAxis("Horizontal") * gameObject.transform.right * speed;
             Vector3 moveZ_WS_frontBehind = Input.GetAxis("Vertical") * gameObject.transform.forward * speed;
             Vector3 moveY_QE_upDown = Input.GetAxis("VerticalY") * gameObject.transform.up * speed;
+
+            //Vector3 fire1Tesy = Input.GetAxis("Fire1") * gameObject.transform.up * speed;
 
             //Olhe aqui:: Sempre crie a variavel fora e atualize no update;
             movement = moveX_AD_sides + moveY_QE_upDown + moveZ_WS_frontBehind;
@@ -167,6 +186,17 @@ namespace Planets.Vehicles{
                 zoomTarget = 5.0f;
             else
                 zoomTarget = 35.0f;
+        }
+
+        void ChangeCamera(string _keyDown /*KeyCode _keyDown*/)
+        {
+            //First Disable all cameras
+            vehicleCamera.enabled = false;
+
+            // Temp var to find the camera
+            Camera camFinder = GameObject.Find(_keyDown).GetComponent<Camera>();
+            // Using the cameraFinder, enable the camera
+            camFinder.enabled = true;
         }
     }
 }

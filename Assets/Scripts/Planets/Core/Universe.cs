@@ -10,8 +10,9 @@ namespace Planets.Core{
 		public int minSystems = 5;
 		public int maxSystems = 10;
 		public List<StarSystem> starSytems = new List<StarSystem>();
-		
-		public List<Probe> probetList = new List<Probe>();//T
+
+        public List<Telescope> telescopeList = new List<Telescope>();//T
+        public List<Probe> probetList = new List<Probe>();//T
 
 		private bool created = false; 
 		
@@ -58,6 +59,27 @@ namespace Planets.Core{
 
 		public void CreateVehicles()//T
         {
+            int numTelescopes = 1;
+
+            for (int i = 0; i < numTelescopes; i++)
+            {
+                //Create gameobject
+                GameObject telescopeObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                //Add Script to Component
+                Telescope telescope = telescopeObject.AddComponent<Telescope>();
+                telescopeObject.name = "Telescope" + i;
+                telescope.Create();
+                telescopeList.Add(telescope);
+
+                //!!!!!!!!!!!!!
+                telescopeObject.transform.position = new Vector3(1000, 1000, 1000);
+
+                //Add Child
+                telescopeObject.transform.parent = gameObject.transform;
+
+            }
+
             int numProbes = 1;
 
             for (int i = 0; i < numProbes; i++)
@@ -81,7 +103,7 @@ namespace Planets.Core{
                 probeObject.transform.position = new Vector3(300, 300, 300);
             }
 
-			probetList[0].vehicleCamera.enabled = true;
+			//probetList[0].vehicleCamera.enabled = true;
         }
 
 		// Update is called once per frame
